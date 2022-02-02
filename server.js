@@ -46,5 +46,5 @@ app.post('/imageurl',(req,res) => images.handleApiCall(req,res));
 app.put('/Image', (req,res) => images.handleImages(req,res,db)); // PUT --- updates content
 
 app.listen(3001,() => {
-    console.log(`SmartBrains is running on port ${PORT}`);
+    console.log(`SmartBrains is running on port 3001`);
 });
