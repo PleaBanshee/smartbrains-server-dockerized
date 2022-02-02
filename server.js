@@ -22,6 +22,14 @@ const db = knex({
     connection: process.env.POSTGRES_URI  // from docker-compose.yml
 });
 
+db.raw("SELECT 1").then(() => {
+    console.log("PostgreSQL connected");
+})
+.catch((e) => {
+    console.log("PostgreSQL not connected");
+    console.error(e);
+});
+
 // console.log(db.connection.connectionString);
 
 // Default route
