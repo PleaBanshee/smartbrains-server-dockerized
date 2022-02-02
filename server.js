@@ -44,6 +44,6 @@ app.post('/imageurl',(req,res) => images.handleApiCall(req,res));
 // Increase user rank when submitting images
 app.put('/Image', (req,res) => images.handleImages(req,res,db)); // PUT --- updates content
 
-app.listen(3001,() => {
-    console.log(`SmartBrains is running on port 3001`);
+app.listen(3000,() => {
+    console.log(`SmartBrains is running on port 3000`);
 });
