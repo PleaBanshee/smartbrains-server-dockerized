@@ -13,7 +13,7 @@ const app = express();
 // use this code so you can parse responses into the correct format
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan('combined'))
 
 // Database configuration
@@ -22,6 +22,19 @@ const db = knex({
     connection: process.env.POSTGRES_URI  // from docker-compose.yml
 });
 
+// For CORS
+const whitelist = ['http://localhost:5000']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+// Test DB Connection
 db.raw("SELECT 1").then(() => {
     console.log("PostgreSQL connected");
 })
@@ -29,8 +42,6 @@ db.raw("SELECT 1").then(() => {
     console.log("PostgreSQL not connected");
     console.error(e);
 });
-
-// console.log(db.connection.connectionString);
 
 // Default route
 app.get('/',(req,res) => {
