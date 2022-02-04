@@ -13,7 +13,6 @@ const app = express();
 // use this code so you can parse responses into the correct format
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
-app.use(cors(corsOptions));
 app.use(morgan('combined'))
 
 // Database configuration
@@ -25,14 +24,16 @@ const db = knex({
 // For CORS
 const whitelist = ['http://localhost:5000']
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
     }
-  }
 }
+
+app.use(cors(corsOptions));
 
 // Test DB Connection
 db.raw("SELECT 1").then(() => {
