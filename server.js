@@ -21,8 +21,9 @@ const db = knex({
     connection: process.env.POSTGRES_URI  // from docker-compose.yml
 });
 
-// For CORS
-const whitelist = ['http://localhost:5000']
+// 'http://localhost:5000
+// For CORS: doesn't allow loading responses from frontend to server  
+const whitelist = []
 const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1) {
@@ -33,7 +34,7 @@ const corsOptions = {
     }
 }
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 // Test DB Connection
 db.raw("SELECT 1").then(() => {
@@ -57,6 +58,9 @@ app.post('/Register',(req,res) => register.handleRegister(req,res,db,bcrypt)); /
 
 // Gets a user profile
 app.get('/Profile/:id', (req,res) => profile.handleProfile(req,res,db));
+
+// Update a User Profile
+app.post('/Profile/:id', (req,res) => profile.handleProfileUpdate(req,res,db));
 
 // API call route
 app.post('/imageurl',(req,res) => images.handleApiCall(req,res));

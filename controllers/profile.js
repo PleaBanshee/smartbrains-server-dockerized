@@ -9,9 +9,24 @@ const handleProfile = (req,res,db) => {
             res.status(400).json('This user doesn\'t exist')
         }
     })
-    .catch(err => res.status(400).json('Something went wrong... Try again'));
+    .catch(err => res.status(400).json(`Something went wrong... Try again\n ${err}`));
+};
+
+const handleProfileUpdate = (req,res,db) => {
+    const {id} = req.params;
+    const { name, age, quote } = req.body.formInput;
+    db('users').where({ id }).update({name})
+    .then(response => {
+        if (response) {
+            res.json('Updated User Profile Successfully!')
+        } else {
+            res.status(400).json('Failed to update User Profile')
+        }
+    })
+    .catch(err => res.status(400).json(`Something went wrong... Try again\n ${err}`));
 };
 
 module.exports = {
-    handleProfile: handleProfile
+    handleProfile,
+    handleProfileUpdate
 }
