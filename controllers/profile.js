@@ -14,7 +14,7 @@ const handleProfile = (req,res,db) => {
 
 const handleProfileUpdate = (req,res,db) => {
     const {id} = req.params;
-    const { name, age, quote } = req.body.formInput;
+    const { name, age, quote } = req.body.formInput; // receives data from modal on frontend
     db('users').where({ id }).update({name})
     .then(response => {
         if (response) {

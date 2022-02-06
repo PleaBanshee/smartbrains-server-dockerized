@@ -51,7 +51,7 @@ app.get('/',(req,res) => {
 });
 
 // Sign In route
-app.post('/signIn', signIn.handleSignIn(db,bcrypt)); // receives req and res in js file
+app.post('/signIn', signIn.signInAuth(db,bcrypt));
 
 // Register route
 app.post('/Register',(req,res) => register.handleRegister(req,res,db,bcrypt)); // dependency injection: passing required objects so we don't need to import them
