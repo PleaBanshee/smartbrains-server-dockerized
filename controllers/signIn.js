@@ -3,7 +3,13 @@ const redis = require('redis') // for storing sessions and user profiles
 require('dotenv').config();
 
 // accepts connection as parameter (beter to define it explicitly)
-const redisClient = redis.createClient({host: '127.0.0.1'});
+const redisClient = redis.createClient({host: process.env.REDIS_URI});
+redisClient.on('connect', function() {
+    console.log('Redis client connected');
+});
+redisClient.on('error', function (err) {
+    console.log(`Redis not connected: ${err}`);
+});
 
 // Just returns promises
 const handleSignIn = (db,bcrypt,req,res) => {
