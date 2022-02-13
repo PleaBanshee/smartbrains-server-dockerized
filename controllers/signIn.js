@@ -39,16 +39,23 @@ const signToken = (email) => {
     return jwt.sign(jwtPayload, `${process.env.JWT_SECTRET}`, {expiresIn: '2 days'});
 }
 
+// Sets token for authentication: returns a promise
+const setToken = (key,val) => {
+    return Promise.resolve(redisClient.set(key,val))
+}
+
 // Generates JWT Token and returns user data
 const createSessions = (user) => {
     // NB!!! Try to avoid signing tokens with sensitive data
     const { email, id } = user;
     const token = signToken(email);
-    return {
+    return setToken(token,id)
+    .then(() => { return { 
         success: true,
         userId: id,
         token // key and value is the same
-    };
+    }})
+    .catch(err => Promise.reject(`Failed to create session:\n ${err}`))
 }
 
 const getAuthTokenId = () => {
