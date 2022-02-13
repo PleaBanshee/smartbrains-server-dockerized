@@ -58,14 +58,21 @@ const createSessions = (user) => {
     .catch(err => Promise.reject(`Failed to create session:\n ${err}`))
 }
 
-const getAuthTokenId = () => {
-    console.log('Authorization permitted')
+// Pass the Auth Token
+const getAuthTokenId = (req,res) => {
+    const { authorization } = req.headers;
+    return redisClient.get(authorization, () => (err,reply) => {
+        if (err || !reply) {
+            return res.status(400).json('Unauthorized')
+        }
+        return res.json({id: reply})
+    })
 }
 
 // default handler: only default handlers should return a response
 const signInAuth = (db,bcrypt) => (req,res) => {
     const { authorization } = req.headers // client sends token in request header
-    return authorization ? getAuthTokenId() : handleSignIn(db,bcrypt,req,res)
+    return authorization ? getAuthTokenId(req,res) : handleSignIn(db,bcrypt,req,res)
     .then(data => {
         return data.id && data.email ? createSessions(data) : 
         Promise.reject('Invalid username and password');
