@@ -3,7 +3,13 @@ const redis = require('redis') // for storing sessions and user profiles
 require('dotenv').config();
 
 // accepts connection as parameter (beter to define it explicitly)
-const redisClient = redis.createClient({host: process.env.REDIS_URI});
+const redisClient = redis.createClient({ url: process.env.REDIS_URI});
+// redisClient.connect()
+async function redisConnect() {
+    return await redisClient.connect();
+}
+redisConnect()
+
 redisClient.on('connect', function() {
     console.log('Redis client connected');
 });
